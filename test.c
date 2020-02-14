@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     float    float1 = 0; // Intermediary float
     float    float2 = 0; // Re-encoded float
 
-	hsnr_struc_t* hsnr_ptr1  = (hsnr_struc_t*)&hsnr1;
+    hsnr_struc_t* hsnr_ptr1  = (hsnr_struc_t*)&hsnr1;
     hsnr_struc_t* hsnr_ptr2  = (hsnr_struc_t*)&hsnr2;
     ieee754_float_t* fstruct = (ieee754_float_t*)&float1;
 
@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
         verbose = 1;
     }
 
-	for (uint32_t i = 0 ; i <= __UINT16_MAX__ ; ++i)
-	{
-		hsnr1 = i;
-		float1 = hsnr_to_float(hsnr1);
+    for (uint32_t i = 0 ; i <= __UINT16_MAX__ ; ++i)
+    {
+        hsnr1 = i;
+        float1 = hsnr_to_float(hsnr1);
        
         if (float_to_hsnr(float1, &hsnr2) != HSNR_OK)
         {
@@ -37,8 +37,8 @@ int main(int argc, char* argv[])
         }
         
         float2 = hsnr_to_float(hsnr2);
-		
-		if ((verbose) || (hsnr1 != hsnr2))
+        
+        if ((verbose) || (hsnr1 != hsnr2))
         {
             printf("%s: 0x%04x {%u, %u, %u} -> %+.24f {%u, %u, %u } -> 0x%04x {%u, %u, %u} -> %+.24f\n", 
                 ((hsnr1 == hsnr2) ? "PASS" : "FAIL"),
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
                 float2);
             rc = 2;
         }
-	}
+    }
 
     if (rc == 0)
     {

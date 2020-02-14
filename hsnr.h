@@ -43,10 +43,10 @@
  */
 enum
 {
-	HSNR_OK              =  0, /**< Success */  
+    HSNR_OK              =  0, /**< Success */  
     HSNR_UNKNOWN_ERROR   = -1, /**< Generic error */
-	HSNR_ARG_ERROR       = -2, /**< Invalid argument */
-	HSNR_ARG_RANGE_ERROR = -3  /**< Input out of range */
+    HSNR_ARG_ERROR       = -2, /**< Invalid argument */
+    HSNR_ARG_RANGE_ERROR = -3  /**< Input out of range */
 };
 
 /* ---------------------------- PUBLIC FUNCTIONS ---------------------------- */

@@ -22,10 +22,10 @@
  */
 enum
 {
-	IEEE754_EXP_BIAS         =  127, /**< Bias for normalized exponent for float */
+    IEEE754_EXP_BIAS         =  127, /**< Bias for normalized exponent for float */
     IEEE754_MANTISSA_BIT_LEN =  23,  /**< Float mantissa size in bits */
-	HSNR_EXP_BIAS            =  25,  /**< Bias for normalized exponent for High-SNR */
-	HSNR_EXP_UNNORM          = -24,  /**< Unnormalized exponent for High-SNR */
+    HSNR_EXP_BIAS            =  25,  /**< Bias for normalized exponent for High-SNR */
+    HSNR_EXP_UNNORM          = -24,  /**< Unnormalized exponent for High-SNR */
     HSNR_MANTISSA_BIT_LEN    =  11,  /**< High-SNR mantissa size in bits */
 };
 
@@ -41,8 +41,8 @@ int float_to_hsnr(float in, uint16_t* out)
         MANT_LEN_DIFF  = IEEE754_MANTISSA_BIT_LEN - HSNR_MANTISSA_BIT_LEN,
     };
     
-	hsnr_struc_t hsnr_struc = { 0 };
-	ieee754_float_t* f_struct = (ieee754_float_t*)&in;
+    hsnr_struc_t hsnr_struc = { 0 };
+    ieee754_float_t* f_struct = (ieee754_float_t*)&in;
 
     if (out == NULL)
     {
@@ -54,33 +54,33 @@ int float_to_hsnr(float in, uint16_t* out)
         return HSNR_ARG_ERROR;
     }
 
-	hsnr_struc.signal_uint = f_struct->signal_uint;
+    hsnr_struc.signal_uint = f_struct->signal_uint;
 
     // Uses the already computed ieee754 mantissa and exponent to set the HSNR fields
-	if (f_struct->exponent_uint8 > EXP_BIAS_LIMIT) // Normal exponent
-	{	
-		hsnr_struc.exponent_int4 = f_struct->exponent_int8 - EXP_BIAS_LIMIT;
-		hsnr_struc.mantissa_uint11 = 
+    if (f_struct->exponent_uint8 > EXP_BIAS_LIMIT) // Normal exponent
+    {    
+        hsnr_struc.exponent_int4 = f_struct->exponent_int8 - EXP_BIAS_LIMIT;
+        hsnr_struc.mantissa_uint11 = 
             ((f_struct->mantissa_uint23 - 1U) >> MANT_LEN_DIFF) + 1U; // Shift and round up
-		if (f_struct->signal_uint) // Reverse representation if negative
-		{
-			hsnr_struc.mantissa_uint11 = HSNR_MANT_MAX - hsnr_struc.mantissa_uint11; 
-			if (hsnr_struc.mantissa_uint11 == 0) // Corner case
-			{
+        if (f_struct->signal_uint) // Reverse representation if negative
+        {
+            hsnr_struc.mantissa_uint11 = HSNR_MANT_MAX - hsnr_struc.mantissa_uint11; 
+            if (hsnr_struc.mantissa_uint11 == 0) // Corner case
+            {
                 // TODO: Add explanation
-				hsnr_struc.exponent_int4 = 
+                hsnr_struc.exponent_int4 = 
                     (f_struct->exponent_int8 - IEEE754_EXP_BIAS - 3);
-			}
-		}
+            }
+        }
     }
-	else // Soft underflow exponent
-	{
-		hsnr_struc.exponent_uint = 0;
-		hsnr_struc.mantissa_uint = in / powf(2, HSNR_EXP_UNNORM);
-	}
-	
+    else // Soft underflow exponent
+    {
+        hsnr_struc.exponent_uint = 0;
+        hsnr_struc.mantissa_uint = in / powf(2, HSNR_EXP_UNNORM);
+    }
+    
     *out = hsnr_struc.uint16;
-   	return HSNR_OK;
+       return HSNR_OK;
 }
 
 float hsnr_to_float(uint16_t in)
