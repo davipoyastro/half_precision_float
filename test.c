@@ -51,9 +51,9 @@ int main(int argc, char* argv[])
                 float2);
 				
             if (hsnr1 != hsnr2) 
-			{
-				rc = 2;
-			}
+            {
+                rc = 2;
+            }
         }
     }
 

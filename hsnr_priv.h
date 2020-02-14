@@ -53,12 +53,12 @@ typedef union
     {
         unsigned int low_uint11:11;
         unsigned int high_uint2:2;
-        unsigned int __padding1:3; /**< Dummy, Don't use */
+        unsigned int __padding1:3; /* Dummy, Don't use */
     } __attribute__((__packed__));
     struct // Signed
     {
         int int13:13;
-        int __padding2:3; /**< Dummy, Don't use */
+        int __padding2:3; /* Dummy, Don't use */
     } __attribute__((__packed__));
 } __attribute__((__packed__)) int13_t;
 
@@ -68,10 +68,12 @@ typedef union
 typedef struct
 {
     int int12:12;
-    int __padding:4; /**< Dummy, Don't use */
+    int __padding:4; /* Dummy, Don't use */
 } __attribute__((__packed__)) int12_t;
 
-
+/**
+ * @brief Bit field structure representing a single precision float.
+ */
 typedef union
 {
     uint32_t uint32;
