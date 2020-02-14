@@ -34,13 +34,13 @@ enum
 int float_to_hsnr(float in, uint16_t* out)
 {
     /* Internal defines - Not worth exposing */
-    enum 
+    enum
     {
         HSNR_MANT_MAX  = (1U << HSNR_MANTISSA_BIT_LEN),
         EXP_BIAS_LIMIT = (IEEE754_EXP_BIAS - 14U),
         MANT_LEN_DIFF  = IEEE754_MANTISSA_BIT_LEN - HSNR_MANTISSA_BIT_LEN,
     };
-    
+
     hsnr_struc_t hsnr_struc = { 0 };
     ieee754_float_t* f_struct = (ieee754_float_t*)&in;
 
@@ -48,7 +48,7 @@ int float_to_hsnr(float in, uint16_t* out)
     {
         return HSNR_ARG_ERROR;
     }
-    
+
     if ((in > HSNR_MAX) || (in < HSNR_MIN))
     {
         return HSNR_ARG_ERROR;
@@ -58,17 +58,17 @@ int float_to_hsnr(float in, uint16_t* out)
 
     // Uses the already computed ieee754 mantissa and exponent to set the HSNR fields
     if (f_struct->exponent_uint8 > EXP_BIAS_LIMIT) // Normal exponent
-    {    
+    {
         hsnr_struc.exponent_int4 = f_struct->exponent_int8 - EXP_BIAS_LIMIT;
-        hsnr_struc.mantissa_uint11 = 
+        hsnr_struc.mantissa_uint11 =
             ((f_struct->mantissa_uint23 - 1U) >> MANT_LEN_DIFF) + 1U; // Shift and round up
         if (f_struct->signal_uint) // Reverse representation if negative
         {
-            hsnr_struc.mantissa_uint11 = HSNR_MANT_MAX - hsnr_struc.mantissa_uint11; 
+            hsnr_struc.mantissa_uint11 = HSNR_MANT_MAX - hsnr_struc.mantissa_uint11;
             if (hsnr_struc.mantissa_uint11 == 0) // Corner case
             {
                 // TODO: Add explanation
-                hsnr_struc.exponent_int4 = 
+                hsnr_struc.exponent_int4 =
                     (f_struct->exponent_int8 - IEEE754_EXP_BIAS - 3);
             }
         }
@@ -76,18 +76,18 @@ int float_to_hsnr(float in, uint16_t* out)
     else // Soft underflow exponent
     {
         hsnr_struc.exponent_uint = 0;
-        hsnr_struc.mantissa_uint = in / powf(2, HSNR_EXP_UNNORM);
+        hsnr_struc.mantissa_uint = in / powf(2U, HSNR_EXP_UNNORM);
     }
-    
+
     *out = hsnr_struc.uint16;
-       return HSNR_OK;
+    return HSNR_OK;
 }
 
 float hsnr_to_float(uint16_t in)
 {
     float ret;
     hsnr_struc_t* hsnr_ptr = (hsnr_struc_t*)&in;
-    
+
     if (hsnr_ptr->exponent_uint4) // Normal exponent
     {
         int13_t tmp;

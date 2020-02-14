@@ -13,7 +13,7 @@
 /**
  * @brief Bit field structure used to encode the High-SNR format.
  */
-typedef union 
+typedef union
 {
     unsigned int uint16:16;
     struct // Unsigned
@@ -29,7 +29,7 @@ typedef union
         int exponent_int:4;
     } __attribute__((__packed__));
     // Verbose aliases
-    struct // Unsigned 
+    struct // Unsigned
     {
         unsigned int mantissa_uint11:11;
         unsigned int signal_uint1:1;
@@ -46,7 +46,7 @@ typedef union
 /**
  * @brief Bit field structure used for type conversion.
  */
-typedef union 
+typedef union
 {
     unsigned int uint16:16;
     struct // Unsigned
@@ -76,26 +76,26 @@ typedef union
 {
     uint32_t uint32;
     float    float32;
-    struct 
+    struct
     {
         unsigned int mantissa_uint:23;
         unsigned int exponent_uint:8;
         unsigned int signal_uint:1;
     } __attribute__((__packed__));
-    struct 
+    struct
     {
         int mantissa_int:23;
         int exponent_int:8;
         int signal_int:1;
     } __attribute__((__packed__));
     // Verbose aliases
-    struct 
+    struct
     {
         unsigned int mantissa_uint23:23;
         unsigned int exponent_uint8:8;
         unsigned int signal_uint1:1;
     } __attribute__((__packed__));
-    struct 
+    struct
     {
         int mantissa_int23:23;
         int exponent_int8:8;

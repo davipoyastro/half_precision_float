@@ -7,14 +7,14 @@
 
 /**
  * This module convert numbers from different floating point encoding.
- * 
- * The High-SNR encoding is a custom format meant to fit in 16 bits 
+ *
+ * The High-SNR encoding is a custom format meant to fit in 16 bits
  * and implements a half precision format with soft underflow unnormalized
  * mantissa.
- * 
- * The absolute range is shown bellow but different ranges can be stored 
+ *
+ * The absolute range is shown bellow but different ranges can be stored
  * as long a multiplication factor is applied.
- * 
+ *
  *  0xf800 {1, 15,    0} -> -4.000000000000000000000000
  *  0xf801 {1, 15,    1} -> -3.999023437500000000000000
  *  0xf802 {1, 15,    2} -> -3.998046875000000000000000
@@ -36,14 +36,14 @@
 /** Minimum float value able to be re-encoded as High-SNR */
 #define HSNR_MIN ((float)-4)
 /** Maximum float value able to be re-encoded as High-SNR */
-#define HSNR_MAX ((float)4 - (float)1/(float)1024) // (+3.9990234375)
+#define HSNR_MAX ((float)4 - (float)1/(float)1024)
 
 /**
  * @brief Error codes.
  */
 enum
 {
-    HSNR_OK              =  0, /**< Success */  
+    HSNR_OK              =  0, /**< Success */
     HSNR_UNKNOWN_ERROR   = -1, /**< Generic error */
     HSNR_ARG_ERROR       = -2, /**< Invalid argument */
     HSNR_ARG_RANGE_ERROR = -3  /**< Input out of range */
@@ -53,7 +53,7 @@ enum
 
 /**
  * @brief Convert a single precision float to 16 bit High-SNR packed format.
- * @note  This function will fail if input is out of range therefore the 
+ * @note  This function will fail if input is out of range therefore the
  *        return code.
  *
  * @param in    Input floating point value.
@@ -65,7 +65,7 @@ extern int float_to_hsnr(float in, uint16_t* out);
 /**
  * @brief Convert a 16 bit High-SNR packed format to single precision float.
  * @note  This function will never fail since every input has an valid output.
- * 
+ *
  * @param in    Input 16 bit High-SNR packed format.
  * @return      Output converted value as single precision float.
  */

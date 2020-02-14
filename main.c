@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 {
     float f;
     unsigned int u;
-    
+
     if (argc == 1)
     {
         printf("Usage:\n  %s <float|hex>\n", argv[0]);
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
         printf(">>> 0x%04x -> %+.24f\n", u, f);
         return 0;
     }
-    
+
     if (sscanf(argv[1], "%f", &f) == 1)
     {
         uint16_t x;
