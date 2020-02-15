@@ -15,6 +15,8 @@
 #error "Float size not supported"
 #endif
 
+// TODO: Optimize usage of powf - Use const table
+
 /* ------------------------------ DEFINITIONS ------------------------------- */
 
 /**
@@ -36,9 +38,8 @@ int float_to_hsnr(float in, uint16_t* out)
     /* Internal defines - Not worth exposing */
     enum
     {
-        HSNR_MANT_MAX  = (1U << HSNR_MANTISSA_BIT_LEN),
-        EXP_BIAS_LIMIT = (IEEE754_EXP_BIAS - 14U),
-        MANT_LEN_DIFF  = IEEE754_MANTISSA_BIT_LEN - HSNR_MANTISSA_BIT_LEN,
+        HSNR_MANT_LIMIT = (1U << HSNR_MANTISSA_BIT_LEN), /* uint11 limit */
+        EXP_BIAS_LIMIT  = (IEEE754_EXP_BIAS - 14U), /* HSNR normal resolution limit */
     };
 
     hsnr_struc_t hsnr_struc = { 0 };
@@ -60,17 +61,20 @@ int float_to_hsnr(float in, uint16_t* out)
     if (f_struct->exponent_uint8 > EXP_BIAS_LIMIT) // Normal exponent
     {
         hsnr_struc.exponent_int4 = f_struct->exponent_int8 - EXP_BIAS_LIMIT;
-        hsnr_struc.mantissa_uint11 =
-            ((f_struct->mantissa_uint23 - 1U) >> MANT_LEN_DIFF) + 1U; // Shift and round up
-        if (f_struct->signal_uint) // Reverse representation if negative
+        if (f_struct->signal_uint) // Negative
         {
-            hsnr_struc.mantissa_uint11 = HSNR_MANT_MAX - hsnr_struc.mantissa_uint11;
-            if (hsnr_struc.mantissa_uint11 == 0) // Corner case
+            // Exponent reverse representation
+            hsnr_struc.mantissa_uint11 = HSNR_MANT_LIMIT - f_struct->mantissa_high_uint11;
+
+            // Fix mantissa underflow
+            if (hsnr_struc.mantissa_uint11 == 0)
             {
-                // TODO: Add explanation
-                hsnr_struc.exponent_int4 =
-                    (f_struct->exponent_int8 - IEEE754_EXP_BIAS - 3);
+                --hsnr_struc.exponent_int4;
             }
+        }
+        else // Positive
+        {
+            hsnr_struc.mantissa_uint11 = f_struct->mantissa_high_uint11;
         }
     }
     else // Soft underflow exponent

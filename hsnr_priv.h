@@ -103,6 +103,14 @@ typedef union
         int exponent_int8:8;
         int signal_int1:1;
     } __attribute__((__packed__));
+    struct
+    {
+        unsigned int mantissa_low_uint12:12;
+        unsigned int mantissa_high_uint11:11;
+        unsigned int exponent_low_uint4:4;
+        unsigned int exponent_high_uint4:4;
+        unsigned int signal_low_uint1:1;
+    } __attribute__((__packed__));
 } __attribute__((__packed__)) ieee754_float_t;
 
 #endif // _HSNR_PRIV_H_
